@@ -150,6 +150,12 @@ class PlayerAi:
             if base.crystal > base.cost("mine"):
                 base.build_mine()
 
+        elif self.ntanks[base.uid] == 1 and self.nships[base.uid] == 0 and self.njets[base.uid] == 0:
+            if base.crystal > base.cost("ship"):
+                ship_uid = base.build_ship(heading=360 * np.random.random())
+                self.nships[base.uid] += 1
+            return  # wait for ship to be built
+
         # Secondly, each base should build a tank if it has less than 5 tanks
         elif base.crystal > base.cost("tank") and self.ntanks[base.uid] < 5:
             # build_tank() returns the uid of the tank that was built
@@ -162,7 +168,7 @@ class PlayerAi:
             ship_uid = base.build_ship(heading=360 * np.random.random())
             # Add 1 to the ship counter for this base
             self.nships[base.uid] += 1
-        elif base.crystal > base.cost("ship") and total_number_of_my_bases < 5 and self.nships[base.uid] < 15:
+        elif base.crystal > base.cost("ship") and total_number_of_my_bases < 3 and self.nships[base.uid] < 6:
             ship_uid = base.build_ship(heading=360 * np.random.random())
             self.nships[base.uid] += 1
         elif base.crystal > base.cost("tank") and self.njets[base.uid] > 5 and self.ntanks[base.uid] < 20:
